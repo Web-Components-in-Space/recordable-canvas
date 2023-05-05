@@ -3,53 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <title>Recordable Canvas</title>
-    <script type="module" src="../recordable-canvas.js"></script>
     <style>
-        recordable-canvas {
+        canvas {
             border-width: 2px;
             border-style: solid;
             border-color: transparent;
         }
-        recordable-canvas[recording] {
-            border-color: red;
-        }
     </style>
 </head>
 <body>
-<h1>Canvas Recording</h1>
-<i>(using the recordable-canvas component)</i>
-<br />
-<recordable-canvas width="300" height="300"></recordable-canvas>
+  <h1>Canvas Recording</h1>
+  <i>(without the recordable-canvas component)</i>
+  <br />
+  <canvas width="300" height="300"></canvas>
   <br />
   <button id="start">Start Recording</button>
   <button id="stop">Stop Recording</button>
   <br />
   <span>Recording Duration<span id="recording-duration"></span></span>
-  <script>
-      const canvas = document.body.querySelector('recordable-canvas');
+  <script type="module">
+      import { CanvasRecorder } from '../canvasrecorder.js';
+
+      const recorder = new CanvasRecorder();
+      const canvas = document.body.querySelector('canvas');
       const startRecording = document.body.querySelector('#start');
       const stopRecording = document.body.querySelector('#stop');
       const recordingTime = document.body.querySelector('#recording-duration');
       let startTime = -1;
 
-      canvas.addEventListener('ready', () => {
-          sun.src = "./assets/canvas_sun.png";
-          moon.src = "./assets/canvas_moon.png";
-          earth.src = "./assets/canvas_earth.png";
-          window.requestAnimationFrame(draw);
-      });
-
-      startRecording.addEventListener('click', () => {
-         canvas.startRecording();
-      });
-
-      stopRecording.addEventListener('click', () => {
-          canvas.stopRecording('myfile');
-      });
 
       const sun = new Image();
       const moon = new Image();
       const earth = new Image();
+      sun.src = "./assets/canvas_sun.png";
+      moon.src = "./assets/canvas_moon.png";
+      earth.src = "./assets/canvas_earth.png";
+      window.requestAnimationFrame(draw);
+
+
+      startRecording.addEventListener('click', () => {
+         recorder.startRecording(canvas);
+      });
+
+      stopRecording.addEventListener('click', () => {
+          recorder.stopRecording('myfile');
+      });
 
       async function draw() {
           if (startTime === -1) {
@@ -92,8 +90,8 @@
 
           ctx.drawImage(sun, 0, 0, 300, 300);
 
-          if (canvas.isRecording) {
-              const duration = await canvas.encodeFrame();
+          if (recorder.isRecording) {
+              const duration = await recorder.encode(canvas);
               recordingTime.innerHTML = ` ${duration/1000000} seconds`;
           }
 

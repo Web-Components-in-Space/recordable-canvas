@@ -1,6 +1,6 @@
 {
   "name": "recordable-canvas",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "devDependencies": {
     "@rollup/plugin-commonjs": "^21.0.1",
     "@rollup/plugin-node-resolve": "^9.0.0",
@@ -9,6 +9,7 @@
     "mp4box": "^0.5.2"
   },
   "files": [
+    "index.*",
     "canvasrecorder.*",
     "contextencoder.*",
     "mp4box.*",

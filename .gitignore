@@ -3,6 +3,7 @@ canvasrecorder.*
 contextencoder.*
 mp4box.*
 recordable-canvas.*
+index.*
 
 # Logs
 logs
