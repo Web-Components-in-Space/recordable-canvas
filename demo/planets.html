@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Recordable Canvas</title>
+    <script type="module" src="../recordable-canvas.js"></script>
+    <style>
+        recordable-canvas {
+            border-width: 2px;
+            border-style: solid;
+            border-color: transparent;
+        }
+        recordable-canvas[recording] {
+            border-color: red;
+        }
+    </style>
+</head>
+<body>
+  <recordable-canvas width="300" height="300"></recordable-canvas>
+  <br />
+  <button id="start">Start Recording</button>
+  <button id="stop">Stop Recording</button>
+  <br />
+  <span>Recording Duration<span id="recording-duration"></span></span>
+  <script>
+      const canvas = document.body.querySelector('recordable-canvas');
+      const startRecording = document.body.querySelector('#start');
+      const stopRecording = document.body.querySelector('#stop');
+      const recordingTime = document.body.querySelector('#recording-duration');
+      let startTime = -1;
+
+      canvas.addEventListener('ready', () => {
+          sun.src = "./assets/canvas_sun.png";
+          moon.src = "./assets/canvas_moon.png";
+          earth.src = "./assets/canvas_earth.png";
+          window.requestAnimationFrame(draw);
+      });
+
+      startRecording.addEventListener('click', () => {
+         canvas.startRecording();
+      });
+
+      stopRecording.addEventListener('click', () => {
+          canvas.stopRecording('myfile');
+      });
+
+      const sun = new Image();
+      const moon = new Image();
+      const earth = new Image();
+
+      async function draw() {
+          if (startTime === -1) {
+              startTime = Date.now();
+          }
+          const ctx = canvas.getContext('2d');
+          ctx.globalCompositeOperation = "destination-over";
+          ctx.clearRect(0, 0, 300, 300); // clear canvas
+
+          ctx.fillStyle = "rgba(0, 0, 0, 0.4)";
+          ctx.strokeStyle = "rgba(0, 153, 255, 0.4)";
+          ctx.save();
+          ctx.translate(150, 150);
+
+          // Earth
+          const time = new Date();
+          ctx.rotate(
+              ((2 * Math.PI) / 60) * time.getSeconds() +
+              ((2 * Math.PI) / 60000) * time.getMilliseconds()
+          );
+          ctx.translate(105, 0);
+          ctx.fillRect(0, -12, 40, 24); // Shadow
+          ctx.drawImage(earth, -12, -12);
+
+          // Moon
+          ctx.save();
+          ctx.rotate(
+              ((2 * Math.PI) / 6) * time.getSeconds() +
+              ((2 * Math.PI) / 6000) * time.getMilliseconds()
+          );
+          ctx.translate(0, 28.5);
+          ctx.drawImage(moon, -3.5, -3.5);
+          ctx.restore();
+
+          ctx.restore();
+
+          ctx.beginPath();
+          ctx.arc(150, 150, 105, 0, Math.PI * 2, false); // Earth orbit
+          ctx.stroke();
+
+          ctx.drawImage(sun, 0, 0, 300, 300);
+
+          if (canvas.isRecording) {
+              const duration = await canvas.encodeFrame();
+              recordingTime.innerHTML = ` ${duration/1000000} seconds`;
+          }
+
+          requestAnimationFrame(draw);
+      }
+  </script>
+</body>
+</html>

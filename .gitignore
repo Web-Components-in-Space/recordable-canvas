@@ -1,3 +1,9 @@
+# Publish
+canvasrecorder.*
+contextencoder.*
+mp4box.*
+recordable-canvas.*
+
 # Logs
 logs
 *.log

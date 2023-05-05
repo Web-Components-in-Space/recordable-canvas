@@ -1,0 +1,1 @@
+export * as mp4box from '../node_modules/mp4box/dist/mp4box.all.js';

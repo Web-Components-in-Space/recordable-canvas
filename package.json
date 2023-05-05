@@ -1,0 +1,22 @@
+{
+  "name": "recordable-canvas",
+  "version": "0.1.0",
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^21.0.1",
+    "@rollup/plugin-node-resolve": "^9.0.0",
+    "@types/dom-webcodecs": "^0.1.3",
+    "typescript": "^4.5.5",
+    "mp4box": "^0.5.2"
+  },
+  "files": [
+    "canvasrecorder.*",
+    "contextencoder.*",
+    "mp4box.*",
+    "recordable-canvas.*"
+  ],
+  "scripts": {
+    "watch": "./node_modules/.bin/tsc --watch",
+    "build": "./node_modules/.bin/tsc",
+    "bundle-mp4box": "./node_modules/.bin/rollup -c mp4box-bundler/mp4box-rollup-cfg.js"
+  }
+}
